@@ -1,0 +1,106 @@
+= CloudBees action: Servicenow Poll For Approval Action
+
+Use this action to wait for approval process to happen for a created Change Request.
+
+
+== Inputs
+
+[cols="2a,1a,1a,3a",options="header"]
+.Input details
+|===
+
+| Input name
+| Data type
+| Required
+| Description
+
+
+| `url`
+| String
+| Yes
+| Servicenow host url.
+
+| `username`
+| String
+| Yes
+| Required for BasicAuth & OAuth.
+
+| `password`
+| String
+| Yes
+| Required for BasicAuth & OAuth.
+
+| `client-id`
+| String
+| No
+| Required for OAuth.
+
+| `client-secret`
+| String
+| No
+| Required for OAuth.
+
+| `cr-number`
+| String
+| Yes
+| Change Request Number requiring approval.
+
+| `poll-interval`
+| String
+| No
+| The time interval (in minutes) in which the action will connect to Service Now to check the approval status. Note: Maximum polling interval is 5760 minutes. Defaults to 3 mins.
+
+| `poll-duration`
+| String
+| No
+| The maximum duration (in minutes) for which the action will continue polling to check the approval status. Note: Maximum polling duration is 5760 minutes. Defaults to 60 mins.
+
+| `state-field-value`
+| String
+| No
+| The value of state field in Service Now. If given, the action will keep polling till the 'state' field reaches this value.  If not provided, state field will not be checked.
+
+| `approval-field-value-approved`
+| String
+| No
+| The value of approval field in Service Now which represents that the CR is approved. If given, the action will keep checking the Approval field till it is either approved or rejected. Note: To poll for Approval field, also provide approval-field-value-rejected input. If these fields are not provided approval field will not be checked.
+
+| `approval-field-value-rejected`
+| String
+| No
+| The approval field value in Service Now which represents that the CR is rejected. Note: To poll for Approval field, also provide approval-field-value-approved input. If these fields are not provided approval field will not be checked.
+
+|===
+
+== Usage example
+
+In your YAML file, To update CR ticket add:
+
+[source,yaml]
+----
+    - name: Servicenow Action with OAuth
+      uses: cloudbees-io/servicenow-poll-for-approval@v1
+      with:
+        url: ${{ vars.SERVICENOW_URL }}
+        username: "username"
+        password: "password"
+        client-id: "client-id"
+        client-secret: "client-secret"
+        cr-number: "CRXYZ"
+        poll-interval: 5
+        poll-duration: 120
+        state: "Ready for Deploy" // should match with customer's servicenow configurations
+        approval-field-value-approved: approved
+        approval-field-value-rejected: rejected
+
+----
+
+== License
+
+This code is made available under the 
+link:https://opensource.org/license/mit/[MIT license].
+
+== References
+
+* Learn more about link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/actions[using actions in CloudBees workflows].
+* Learn about link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/[the CloudBees platform].

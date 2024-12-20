@@ -1,0 +1,75 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: "Servicenow Polling Action"
+inputs:
+  url:
+    description: 'Servicenow host url'
+    required: true
+  username:
+    description: 'Servicenow username'
+    required: true
+  password:
+    description: 'Servicenow password'
+    required: true
+  client-id:
+    description: 'Servicenow client id (oauth client id)'
+    default: ''
+  client-secret:
+    description: 'Servicenow client secret (oauth client secret)'
+    default: ''
+  cr-number: 
+    description: 'Unique CR number'
+    required: true
+  poll-interval:
+    description: 'The time interval (in minutes) in which the action will connect to Service Now to check the approval status. Note: Maximum polling interval is 5760 minutes. Defaults to 3 minutes'
+    default: '3'
+  poll-duration:
+    description: 'The maximum duration (in minutes) for which the action will continue polling to check the approval status. Note: Maximum polling duration is 5760 minutes which will be the default'
+    default: '5760'
+  state-field-value:
+    description: 'The name of state field to be checked for approval evaluation. if not provided state field will not be checked'
+    default: ''
+  approval-field-value-approved:
+    description: 'For evaluating Approval this the value of the approval field to be provided along with approval-field-value-rejected input.  if not provided will not be checked'
+    default: ''
+  approval-field-value-rejected:
+    description: 'For evaluating Rejection this the value of the approval field to be provided along with approval-field-value-approval input.  if not provided will not be checked'
+    default: ''
+
+
+outputs:
+  servicenow_output:
+    value: ${{ steps.invoke-servicenow-polling-action.outputs.servicenow_output_var }}
+    description: servicenow polling env variable output
+
+runs:
+  using: composite
+  steps:
+    - id: invoke-servicenow-polling-action
+      name: invoke-servicenow-polling-action
+      uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-ecbd9907a56d4be6f4750659acfb97f0e065343d
+      shell: sh
+      env: 
+        RUN_ID: ${{ cloudbees.run_id }}
+        JOB_ID: ${{ job.id }}
+        STEP_ID: ${{ step.internal.id }}
+        DNS_URL: ${{ cloudbees.api.url }}
+        JWT_TOKEN: ${{ cloudbees.api.token }}
+      run: |
+        set -x
+        cd /app
+        
+        ./servicenow-poll-for-approval -i '{
+          "url": "${{ inputs.url }}",
+          "username": "${{ inputs.username }}",
+          "password": "${{ inputs.password }}",
+          "client_id": "${{ inputs.client-id }}",
+          "client_secret": "${{ inputs.client-secret }}",
+          "number": "${{ inputs.cr-number }}",
+          "poll_interval": ${{ inputs.poll-interval }},
+          "poll_duration": ${{ inputs.poll-duration }},
+          "approval_field_value_approved": "${{ inputs.approval-field-value-approved }}",
+          "approval_field_value_rejected": "${{ inputs.approval-field-value-rejected }}",
+          "state_field_value": "${{ inputs.state-field-value }}"
+
+          }'
