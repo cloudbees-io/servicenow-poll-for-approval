@@ -1,98 +1,146 @@
-= CloudBees action: Servicenow Poll For Approval Action
+= CloudBees action: ServiceNow change request poll for approval
 
-Use this action to wait for approval process to happen for a created Change Request.
+Use this functionality to query an existing ServiceNow change request for approval.
 
+The user must provide:
+
+* Valid credentials (link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/service-now/#_authentication_methods[Basic authentication or OAuth authentication]) and the ServiceNow host URL.
+* The *cr-number* auto-generated during change request creation.
+* At least *one* of the following two options to poll for these fields to reach the given values:
+** The current state of the change request (specified by `state-field-value`).
+** The value of the *approval* field in ServiceNow (specified by `approval-field-value-approved` and `approval-field-value-rejected`).
 
 == Inputs
 
-[cols="2a,1a,1a,3a",options="header"]
+Inputs for querying a change request for approval are listed below.
+
+[cols="3a,2a,4a,5a",options="header"]
 .Input details
 |===
 
-| Input name
+| Change request model field
 | Data type
 | Required
 | Description
 
-
 | `url`
 | String
 | Yes
-| Servicenow host url.
+| The ServiceNow host URL.
 
 | `username`
 | String
 | Yes
-| Required for BasicAuth & OAuth.
+| The username for authentication.
 
 | `password`
 | String
 | Yes
-| Required for BasicAuth & OAuth.
+| The password for authentication.
 
 | `client-id`
 | String
-| No
-| Required for OAuth.
+| Required only for OAuth-based authentication.
+| The unique identification number of the client.
 
 | `client-secret`
 | String
-| No
-| Required for OAuth.
+| Required only for OAuth-based authentication.
+| The client secret for authentication.
 
 | `cr-number`
 | String
 | Yes
-| Change Request Number requiring approval.
+| The unique number auto-generated during link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/service-now/create-change-request#identifiers[change request creation].
 
 | `poll-interval`
 | String
 | No
-| The time interval (in minutes) in which the action will connect to Service Now to check the approval status. Note: Maximum polling interval is 5760 minutes. Defaults to 3 mins.
+| The polling interval, in minutes, for the action to periodically check the approval status in ServiceNow.
+Default is `3`, and the maximum interval time allowed is `5760` minutes.
 
 | `poll-duration`
 | String
 | No
-| The maximum duration (in minutes) for which the action will continue polling to check the approval status. Note: Maximum polling duration is 5760 minutes. Defaults to 60 mins.
+| The maximum time duration, in minutes, for the action to continue polling for approval status in ServiceNow.
+Default is `60`, and the maximum duration allowed is `5760` minutes.
 
 | `state-field-value`
 | String
-| No
-| The value of state field in Service Now. If given, the action will keep polling till the 'state' field reaches this value.  If not provided, state field will not be checked.
+| Required if `approval-field-value-approved` and `approval-field-value-rejected` are not specified.
+| The value of the *state* field in ServiceNow.
+The action continues to poll until the *state* field in ServiceNow matches `state-field-value`.
 
 | `approval-field-value-approved`
 | String
-| No
-| The value of approval field in Service Now which represents that the CR is approved. If given, the action will keep checking the Approval field till it is either approved or rejected. Note: To poll for Approval field, also provide approval-field-value-rejected input. If these fields are not provided approval field will not be checked.
+| Required if `approval-field-value-rejected` is specified.
+| The value of the *approval* field in ServiceNow which indicates that the change request is approved.
+The action continues to poll until the *approval* field in ServiceNow is either "approved" or "rejected".
 
 | `approval-field-value-rejected`
 | String
-| No
-| The approval field value in Service Now which represents that the CR is rejected. Note: To poll for Approval field, also provide approval-field-value-approved input. If these fields are not provided approval field will not be checked.
+| Required if `approval-field-value-approved` is specified.
+| The value of the *approval* field in ServiceNow which indicates that the change request is rejected.
+The action continues to poll until the *approval* field in ServiceNow is either "approved" or "rejected".
 
 |===
 
-== Usage example
+== Usage examples
 
-In your YAML file, To update CR ticket add:
+The following is an example payload for querying a change request for approval using OAuth-based authentication and both state and approval values:
 
-[source,yaml]
+[source,yaml,role="default-expanded"]
 ----
-    - name: Servicenow Action with OAuth
-      uses: cloudbees-io/servicenow-poll-for-approval@v1
-      with:
-        url: ${{ vars.SERVICENOW_URL }}
-        username: "username"
-        password: "password"
-        client-id: "client-id"
-        client-secret: "client-secret"
-        cr-number: "CRXYZ"
-        poll-interval: 5
-        poll-duration: 120
-        state: "Ready for Deploy" // should match with customer's servicenow configurations
-        approval-field-value-approved: approved
-        approval-field-value-rejected: rejected
+      - name: Query ServiceNow CR with state and approval fields
+        uses: cloudbees-io/service-now-poll-for-approval@v1
+        with:
+          url: ${{ vars.SERVICENOW_URL }}
+          username: ${{ vars.MY_SERVICENOW_USERNAME }}
+          password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          client-id: ${{ secrets.MY_CLIENT_ID }}
+          client-secret: ${{ secrets.MY_CLIENT_SECRET }}
+          cr-number: "Unique ServiceNow-generated number"
+          poll-interval: 5
+          poll-duration: 120
+          state-field-value: "Ready for deploy"
+          approval-field-value-approved: approved
+          approval-field-value-rejected: rejected
+----
 
+The following is an example payload for querying a change request for approval using basic authentication and the state value:
+
+[source,yaml,role="default-expanded"]
+----
+      - name: Query ServiceNow CR with state field
+        uses: cloudbees-io/service-now-poll-for-approval@v1
+        with:
+          url: ${{ vars.SERVICENOW_URL }}
+          username: ${{ vars.MY_SERVICENOW_USERNAME }}
+          password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          cr-number: "Unique ServiceNow-generated number"
+          poll-interval: 3
+          poll-duration: 60
+          state-field-value: "Ready for deploy"
+
+----
+
+The following is an example payload for querying a change request for approval using OAuth-based authentication and approval values:
+
+[source,yaml,role="default-expanded"]
+----
+      - name: Query ServiceNow CR with approval fields
+        uses: cloudbees-io/service-now-poll-for-approval@v1
+        with:
+          url: ${{ vars.SERVICENOW_URL }}
+          username: ${{ vars.MY_SERVICENOW_USERNAME }}
+          password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          client-id: ${{ secrets.MY_CLIENT_ID }}
+          client-secret: ${{ secrets.MY_CLIENT_SECRET }}
+          cr-number: "Unique ServiceNow-generated number"
+          poll-interval: 15
+          poll-duration: 2000
+          approval-field-value-approved: approved
+          approval-field-value-rejected: rejected
 ----
 
 == License
