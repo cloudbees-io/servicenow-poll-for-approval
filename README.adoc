@@ -2,9 +2,23 @@
 
 Use this functionality to query an existing ServiceNow change request for approval.
 
+== Authentication methods
+
+The ServiceNow action supports both basic and OAuth authentication methods to connect with ServiceNow.
+
+* *Basic authentication*: Provide a ServiceNow URL, a valid username, and a password to connect to the ServiceNow application.
+* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret*, for generating a bearer access token with an expiration date.
+This method is more secure.
+
+== Supported versions
+
+CloudBees has tested and supports the link:https://www.servicenow.com/docs/bundle/xanadu-release-notes/page/release-notes/family-release-notes.html[ServiceNow Xanadu release] for use with these platform actions.
+Other versions of ServiceNow may work with the CloudBees platform, but they are not yet supported.
+If you are using another version of ServiceNow, submit a feature request with link:https://support.cloudbees.com[CloudBees Support].
+
 The user must provide:
 
-* Valid credentials (link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/service-now/#_authentication_methods[Basic authentication or OAuth authentication]) and the ServiceNow host URL.
+* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL.
 * The *cr-number* auto-generated during change request creation.
 * At least *one* of the following two options to poll for these fields to reach the given values:
 ** The current state of the change request (specified by `state-field-value`).
@@ -51,7 +65,7 @@ Inputs for querying a change request for approval are listed below.
 | `cr-number`
 | String
 | Yes
-| The unique number auto-generated during link:https://docs.cloudbees.com/docs/cloudbees-platform/latest/service-now/create-change-request#identifiers[change request creation].
+| The unique number auto-generated during change request creation.
 
 | `poll-interval`
 | String
