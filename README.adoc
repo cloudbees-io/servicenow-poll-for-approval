@@ -99,6 +99,43 @@ The action continues to poll until the *approval* field in ServiceNow is either 
 
 |===
 
+
+=== Outputs
+
+Outputs for poll for approval request functionality are listed below.
+
+[cols="3a,2a,3a,5a",options="header"]
+.Output details
+|===
+
+| Change request model field
+| Data type
+| Required?
+| Description
+
+| `number`
+| String
+| Yes
+| The unique CR number auto-generated during change request creation.
+
+| `sys_id`
+| String
+| Yes
+| The identifier auto-generated during change request creation.
+
+| `approval`
+| String
+| Yes
+| The approval value of the change request.
+
+| `state`
+| String
+| Yes
+| The current status of the change request.
+
+|===
+
+
 == Usage examples
 
 The following is an example payload for querying a change request for approval using OAuth-based authentication and both state and approval values:
@@ -156,6 +193,25 @@ The following is an example payload for querying a change request for approval u
           approval-field-value-approved: approved
           approval-field-value-rejected: rejected
 ----
+
+
+The following is an example refering to output parameter number from create  as input in update step:
+
+[source,yaml,role="default-expanded"]
+----
+      - name: Query ServiceNow CR with state field
+        uses: cloudbees-io/service-now-poll-for-approval@v1
+        with:
+          url: ${{ vars.SERVICENOW_URL }}
+          username: ${{ vars.MY_SERVICENOW_USERNAME }}
+          password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          cr-number: ${{ fromJSON(steps.create_cr.outputs.servicenow_output).number }}
+          poll-interval: 3
+          poll-duration: 60
+          state-field-value: "Ready for deploy"
+
+----
+
 
 == License
 
