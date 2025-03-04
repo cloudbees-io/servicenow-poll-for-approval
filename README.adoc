@@ -104,33 +104,28 @@ The action continues to poll until the *approval* field in ServiceNow is either 
 
 Outputs for poll for approval request functionality are listed below.
 
-[cols="3a,2a,3a,5a",options="header"]
+[cols="3a,2a,5a",options="header"]
 .Output details
 |===
 
 | Change request model field
 | Data type
-| Required?
 | Description
 
 | `number`
 | String
-| Yes
 | The unique CR number auto-generated during change request creation.
 
 | `sys_id`
 | String
-| Yes
 | The identifier auto-generated during change request creation.
 
 | `approval`
 | String
-| Yes
 | The approval value of the change request.
 
 | `state`
 | String
-| Yes
 | The current status of the change request.
 
 |===
