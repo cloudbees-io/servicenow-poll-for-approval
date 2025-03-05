@@ -122,7 +122,7 @@ Outputs for poll for approval request functionality are listed below.
 
 | `approval`
 | String
-| The approval value of the change request.
+| The value of Approval field of the change request.
 
 | `state`
 | String
@@ -190,7 +190,7 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example refering to output parameter number from create  as input in update step:
+The following is an example referring to output parameter 'number' from create step as input in poll-for-approval step:
 
 [source,yaml,role="default-expanded"]
 ----
