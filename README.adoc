@@ -190,7 +190,7 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to output parameter 'number' from xref:README.adoc#authentication-methods[create] step as input in poll-for-approval step:
+The following is an example referring to output parameter 'number' from link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in poll-for-approval step:
 
 [source,yaml,role="default-expanded"]
 ----
