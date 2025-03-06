@@ -4,10 +4,10 @@ Use this functionality to query an existing ServiceNow change request for approv
 
 == Authentication methods
 
-The ServiceNow action supports both basic and OAuth authentication methods to connect with ServiceNow.
+This action supports both basic and OAuth authentication methods for connecting to ServiceNow.
 
 * *Basic authentication*: Provide a ServiceNow URL, a valid username, and a password to connect to the ServiceNow application.
-* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret*, for generating a bearer access token with an expiration date.
+* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret*to generate a bearer access token with an expiration date.
 This method is more secure.
 
 == Supported versions
@@ -18,9 +18,9 @@ If you are using another version of ServiceNow, submit a feature request with li
 
 The user must provide:
 
-* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL.
+* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL are required.
 * The *cr-number* auto-generated during change request creation.
-* At least *one* of the following two options to poll for these fields to reach the given values:
+* Provide at least one of the following options to poll for these fields until they reach the specified values:
 ** The current state of the change request (specified by `state-field-value`).
 ** The value of the *approval* field in ServiceNow (specified by `approval-field-value-approved` and `approval-field-value-rejected`).
 
@@ -65,19 +65,19 @@ Inputs for querying a change request for approval are listed below.
 | `cr-number`
 | String
 | Yes
-| The unique number auto-generated during change request creation.
+| The unique number is auto-generated during change request creation.
 
 | `poll-interval`
 | String
 | No
 | The polling interval, in minutes, for the action to periodically check the approval status in ServiceNow.
-Default is `3`, and the maximum interval time allowed is `5760` minutes.
+The default is `3`, and the maximum interval time allowed is `5760` minutes.
 
 | `poll-duration`
 | String
 | No
 | The maximum time duration, in minutes, for the action to continue polling for approval status in ServiceNow.
-Default is `60`, and the maximum duration allowed is `5760` minutes.
+The default is `60`, and the maximum duration allowed is `5760` minutes.
 
 | `state-field-value`
 | String
@@ -88,7 +88,7 @@ The action continues to poll until the *state* field in ServiceNow matches `stat
 | `approval-field-value-approved`
 | String
 | Required if `approval-field-value-rejected` is specified.
-| The value of the *approval* field in ServiceNow which indicates that the change request is approved.
+| The *approval* field's value in ServiceNow indicates the change request is approved.
 The action continues to poll until the *approval* field in ServiceNow is either "approved" or "rejected".
 
 | `approval-field-value-rejected`
@@ -102,7 +102,7 @@ The action continues to poll until the *approval* field in ServiceNow is either 
 
 === Outputs
 
-Outputs for poll for approval request functionality are listed below.
+Outputs for the poll for approval request functionality are listed below.
 
 [cols="3a,2a,5a",options="header"]
 .Output details
@@ -114,15 +114,15 @@ Outputs for poll for approval request functionality are listed below.
 
 | `number`
 | String
-| The unique CR number auto-generated during change request creation.
+| The unique change request number is auto-generated during change request creation.
 
 | `sys_id`
 | String
-| The identifier auto-generated during change request creation.
+| The identifier is auto-generated during change request creation.
 
 | `approval`
 | String
-| The value of Approval field of the change request.
+| The value of the Approval field in the change request.
 
 | `state`
 | String
@@ -190,7 +190,7 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to output parameter 'number' from link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in poll-for-approval step:
+The following is an example referring to the output parameter 'number' from link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in poll-for-approval step:
 
 [source,yaml,role="default-expanded"]
 ----
