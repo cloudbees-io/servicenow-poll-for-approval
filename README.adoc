@@ -190,7 +190,7 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[change request creation] step as input in the poll for approval step:
+The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#create-a-change-request[change request creation] step as input in the poll for approval step:
 
 [source,yaml,role="default-expanded"]
 ----
