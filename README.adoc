@@ -122,7 +122,7 @@ Outputs for the poll for approval request functionality are listed below.
 
 | `approval`
 | String
-| The value of the Approval field in the change request.
+| The value of the *approval* field in ServiceNow.
 
 | `state`
 | String
