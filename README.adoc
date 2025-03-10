@@ -60,7 +60,7 @@ Inputs for querying a change request for approval are listed below.
 | `client-secret`
 | String
 | Required only for OAuth-based authentication.
-| The client secret for authentication.
+| The client secret used for authentication.
 
 | `cr-number`
 | String
