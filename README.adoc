@@ -7,7 +7,7 @@ Use this functionality to query an existing ServiceNow change request for approv
 This action supports both basic and OAuth authentication methods for connecting to ServiceNow.
 
 * *Basic authentication*: Provide a ServiceNow URL, a valid username, and a password to connect to the ServiceNow application.
-* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret*to generate a bearer access token with an expiration date.
+* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret* for generating a bearer access token with an expiration date.
 This method is more secure.
 
 == Supported versions
@@ -18,9 +18,9 @@ If you are using another version of ServiceNow, submit a feature request with li
 
 The user must provide:
 
-* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL are required.
+* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL.
 * The *cr-number* auto-generated during change request creation.
-* Provide at least one of the following options to poll for these fields until they reach the specified values:
+* At least *one* of the following options to poll for these fields until they reach the specified values:
 ** The current state of the change request (specified by `state-field-value`).
 ** The value of the *approval* field in ServiceNow (specified by `approval-field-value-approved` and `approval-field-value-rejected`).
 
@@ -65,7 +65,7 @@ Inputs for querying a change request for approval are listed below.
 | `cr-number`
 | String
 | Yes
-| The unique number is auto-generated during change request creation.
+| The unique number auto-generated during change request creation.
 
 | `poll-interval`
 | String
@@ -88,7 +88,7 @@ The action continues to poll until the *state* field in ServiceNow matches `stat
 | `approval-field-value-approved`
 | String
 | Required if `approval-field-value-rejected` is specified.
-| The *approval* field's value in ServiceNow indicates the change request is approved.
+| The value of the *approval* field in ServiceNow that indicates the change request is approved.
 The action continues to poll until the *approval* field in ServiceNow is either "approved" or "rejected".
 
 | `approval-field-value-rejected`
@@ -114,11 +114,11 @@ Outputs for the poll for approval request functionality are listed below.
 
 | `number`
 | String
-| The unique change request number is auto-generated during change request creation.
+| The unique change request number auto-generated during change request creation.
 
 | `sys_id`
 | String
-| The identifier is auto-generated during change request creation.
+| The identifier auto-generated during change request creation.
 
 | `approval`
 | String
@@ -190,7 +190,7 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to the output parameter 'number' from link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in poll-for-approval step:
+The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in the poll-for-approval step:
 
 [source,yaml,role="default-expanded"]
 ----
@@ -206,7 +206,6 @@ The following is an example referring to the output parameter 'number' from link
           state-field-value: "Ready for deploy"
 
 ----
-
 
 == License
 
