@@ -138,7 +138,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with state and approval fields
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -158,7 +158,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with state field
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -175,7 +175,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with approval fields
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -190,21 +190,22 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in the poll-for-approval step:
+The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[change request creation] step as input in the poll for approval step:
 
 [source,yaml,role="default-expanded"]
 ----
-      - name: Query ServiceNow CR with state field
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+      - name: Query ServiceNow CR with output parameter ref
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
           password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          client-id: ${{ secrets.MY_CLIENT_ID }}
+          client-secret: ${{ secrets.MY_CLIENT_SECRET }}
           cr-number: ${{ fromJSON(steps.create_cr.outputs.servicenow_output).number }}
           poll-interval: 3
           poll-duration: 60
           state-field-value: "Ready for deploy"
-
 ----
 
 == License
