@@ -45,12 +45,12 @@ Inputs for querying a change request for approval are listed below.
 | `username`
 | String
 | Yes
-| The username for authentication.
+| The username used for authentication.
 
 | `password`
 | String
 | Yes
-| The password for authentication.
+| The password used for authentication.
 
 | `client-id`
 | String
