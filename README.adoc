@@ -7,7 +7,7 @@ Use this functionality to query an existing ServiceNow change request for approv
 This action supports both basic and OAuth authentication methods for connecting to ServiceNow.
 
 * *Basic authentication*: Provide a ServiceNow URL, a valid username, and a password to connect to the ServiceNow application.
-* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret*to generate a bearer access token with an expiration date.
+* *OAuth authentication*: In addition to a ServiceNow URL, a valid username, and a password, provide a *ClientId* and *Client Secret* for generating a bearer access token with an expiration date.
 This method is more secure.
 
 == Supported versions
@@ -18,9 +18,9 @@ If you are using another version of ServiceNow, submit a feature request with li
 
 The user must provide:
 
-* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL are required.
+* xref:README.adoc#authentication-methods[Valid credentials] and the ServiceNow host URL.
 * The *cr-number* auto-generated during change request creation.
-* Provide at least one of the following options to poll for these fields until they reach the specified values:
+* At least *one* of the following options to poll for these fields until they reach the specified values:
 ** The current state of the change request (specified by `state-field-value`).
 ** The value of the *approval* field in ServiceNow (specified by `approval-field-value-approved` and `approval-field-value-rejected`).
 
@@ -45,12 +45,12 @@ Inputs for querying a change request for approval are listed below.
 | `username`
 | String
 | Yes
-| The username for authentication.
+| The username used for authentication.
 
 | `password`
 | String
 | Yes
-| The password for authentication.
+| The password used for authentication.
 
 | `client-id`
 | String
@@ -60,12 +60,12 @@ Inputs for querying a change request for approval are listed below.
 | `client-secret`
 | String
 | Required only for OAuth-based authentication.
-| The client secret for authentication.
+| The client secret used for authentication.
 
 | `cr-number`
 | String
 | Yes
-| The unique number is auto-generated during change request creation.
+| The unique number auto-generated during change request creation.
 
 | `poll-interval`
 | String
@@ -88,7 +88,7 @@ The action continues to poll until the *state* field in ServiceNow matches `stat
 | `approval-field-value-approved`
 | String
 | Required if `approval-field-value-rejected` is specified.
-| The *approval* field's value in ServiceNow indicates the change request is approved.
+| The value of the *approval* field in ServiceNow that indicates the change request is approved.
 The action continues to poll until the *approval* field in ServiceNow is either "approved" or "rejected".
 
 | `approval-field-value-rejected`
@@ -114,15 +114,15 @@ Outputs for the poll for approval request functionality are listed below.
 
 | `number`
 | String
-| The unique change request number is auto-generated during change request creation.
+| The unique change request number auto-generated during change request creation.
 
 | `sys_id`
 | String
-| The identifier is auto-generated during change request creation.
+| The identifier auto-generated during change request creation.
 
 | `approval`
 | String
-| The value of the Approval field in the change request.
+| The value of the *approval* field in ServiceNow.
 
 | `state`
 | String
@@ -138,7 +138,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with state and approval fields
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -158,7 +158,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with state field
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -175,7 +175,7 @@ The following is an example payload for querying a change request for approval u
 [source,yaml,role="default-expanded"]
 ----
       - name: Query ServiceNow CR with approval fields
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
@@ -190,23 +190,23 @@ The following is an example payload for querying a change request for approval u
 ----
 
 
-The following is an example referring to the output parameter 'number' from link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#usage-examples-creating[create] step as input in poll-for-approval step:
+The following is an example referring to the output parameter `number` from the link:https://github.com/cloudbees-io/servicenow/blob/main/README.adoc#create-a-change-request[change request creation] step as input in the poll for approval step:
 
 [source,yaml,role="default-expanded"]
 ----
-      - name: Query ServiceNow CR with state field
-        uses: cloudbees-io/service-now-poll-for-approval@v1
+      - name: Query ServiceNow CR with output parameter ref
+        uses: https://github.com/cloudbees-io/service-now-poll-for-approval@v1
         with:
           url: ${{ vars.SERVICENOW_URL }}
           username: ${{ vars.MY_SERVICENOW_USERNAME }}
           password: ${{ secrets.MY_SERVICENOW_PASSWORD }}
+          client-id: ${{ secrets.MY_CLIENT_ID }}
+          client-secret: ${{ secrets.MY_CLIENT_SECRET }}
           cr-number: ${{ fromJSON(steps.create_cr.outputs.servicenow_output).number }}
           poll-interval: 3
           poll-duration: 60
           state-field-value: "Ready for deploy"
-
 ----
-
 
 == License
 
