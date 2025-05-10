@@ -47,7 +47,8 @@ runs:
   steps:
     - id: invoke-servicenow-polling-action
       name: invoke-servicenow-polling-action
-      uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-ecbd9907a56d4be6f4750659acfb97f0e065343d
+      # latest image
+      uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-ff8b2b5a7307b880515a704018b05fd117a96028
       shell: sh
       env: 
         RUN_ID: ${{ cloudbees.run_id }}
@@ -57,9 +58,8 @@ runs:
         JWT_TOKEN: ${{ cloudbees.api.token }}
       run: |
         set -x
-        cd /app
         
-        ./servicenow-poll-for-approval -i '{
+        /app/servicenow-poll-for-approval -i '{
           "url": "${{ inputs.url }}",
           "username": "${{ inputs.username }}",
           "password": "${{ inputs.password }}",
@@ -71,5 +71,4 @@ runs:
           "approval_field_value_approved": "${{ inputs.approval-field-value-approved }}",
           "approval_field_value_rejected": "${{ inputs.approval-field-value-rejected }}",
           "state_field_value": "${{ inputs.state-field-value }}"
-
           }'
