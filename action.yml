@@ -48,7 +48,7 @@ runs:
     - id: invoke-servicenow-polling-action
       name: invoke-servicenow-polling-action
       # latest image
-      uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-ff8b2b5a7307b880515a704018b05fd117a96028
+      uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-a5dd692908606f1daa3cffe6ca976050babd5cb6
       shell: sh
       env: 
         RUN_ID: ${{ cloudbees.run_id }}
