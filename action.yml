@@ -47,7 +47,7 @@ runs:
   steps:
     - id: invoke-servicenow-polling-action
       name: invoke-servicenow-polling-action
-      # latest image      
+      # latest image
       uses: docker://public.ecr.aws/l7o7z1g8/actions/servicenow-poll-actions:main-4ee9b58b8c84cafa43c6590b467bc792bc646068
       shell: sh
       env: 
